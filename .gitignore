@@ -1,0 +1,7 @@
+Archivos temporales de Emacs
+**/*~
+
+**/#*#
+
+#Directorio build/
+build/
