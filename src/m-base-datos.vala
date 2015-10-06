@@ -22,7 +22,7 @@ public class M.BaseDatos : GLib.Object {
 
 	/**
 	 * Ejecuta una operación no SELECT sobre la base de datos con la conexión
-	 * actual. <<BR>>
+	 * actual.
 	 *
 	 * Regresa el número de renglones afectados por la ejecución de
 	 * <code>consulta</code>, -1 si ocurre un error, -2 en caso de que el
