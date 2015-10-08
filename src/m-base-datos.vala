@@ -1,71 +1,76 @@
-using Gda;
+using Sqlite;
 
 public class M.BaseDatos : GLib.Object {
 
-	public string proveedor { private set; get; default = "SQLite"; }
-	public string constr { private set; get; default = "SQLite://DB_DIR=.;DB_NAME=DataBase.db"; }
-	public Connection conn { private set; get; }
+	//Administrador de la base de datos.
+	private Database db;
+	private string errmsg;
 
 	/**
 	 * Abre una conexión a la base de datos.
 	 *
-	 * @throws Error Este método puede fallar con dominio de error
-	 *         GDA_CONNECTION_ERROR o ConfigError.
+	 * Abre una conexión a la base de datos, la base de datos usa restricciones
+	 * de llaves foráneas y cuenta con un tiempo de espera para las operaciones
+	 * de 30 segundos. Regresa un entero representando si la operación se
+	 * realizó con éxito o no. Para más información sobre el valor de retorno
+	 * véase [[https://www.sqlite.org/capi3ref.html#SQLITE_ABORT|Result Codes]].
+	 *
+	 * @return Un entero representando si la operación se realizó con éxito
+	 *         (Sqlite.OK) o no.
 	 */
-	public void abre_conexion ()
-	throws Error
+	public int abre_conexion ()
 	{
-		conn = Connection.open_from_string(null, constr, null, ConnectionOptions.NONE);
-		//Necesitamos claves foráneas.
-		conn.execute_non_select_command ("PRAGMA foreign_keys = ON;");
+		int ec = Database.open ("Database.db", out db);
+		if (ec != Sqlite.OK) {
+			return db.errcode ();
+		}
+		//Neciesitamos claves foráneas.
+		ec = db.exec ("PRAGMA foreign_keys = ON;", null, out errmsg);
+		if (ec != Sqlite.OK) {
+			return ec;
+		}
+		//30 segundos para tiempo de espera.
+		ec = db.busy_timeout (30000);
+		return ec;
 	}
 
 	/**
-	 * Ejecuta una operación no SELECT sobre la base de datos con la conexión
+	 * Ejecuta una consulta no SELECT sobre la base de datos con la conexión
 	 * actual.
 	 *
-	 * Regresa el número de renglones afectados por la ejecución de
-	 * <code>consulta</code>, -1 si ocurre un error, -2 en caso de que el
-	 * proveedor no regrese el número de renglones afectados.
+	 * Ejectua una consulta no SELECT sobre la base de datos, regresa un entero
+	 * representando si la operación se realizó con éxito o no.
 	 *
-	 * @param consulta Una operación no SELECT sobre la base de datos.
+	 * @param consulta La consulta SQL no SELECT.
 	 *
-	 * @return El número de renglones afectados (>= 0), -1, ó -2.
+	 * @return Un entero representando si la operación se realizó con éxito
+	 *         (Sqlite.OK) o no.
 	 */
 	public int realiza_consulta (string consulta)
-	throws Error
-	requires (conn.is_opened ())
 	{
-		return conn.execute_non_select_command (consulta);
+		return db.exec (consulta, null, out errmsg);
 	}
 
 	/**
-	 * Ejecuta una operación SELECT sobre la base de datos con la conexión
-	 * actual. <<BR>>
+	 * Ejecuta una consulta SELECT sobre la base de datos con la conexión
+	 * actual.
 	 *
-	 * Regresa un DataModel representando el conjunto resultado de la consulta
-	 * SELECT si la consulta se realizó con éxito, null en otro caso.
+	 * Ejecuta una consulta SELECT sobre la base de datos, regresando un entero
+	 * representando si la operación se realizó con éxito o no, y ejecutando un
+	 * Callback sobre el conjunto de resultados.
 	 *
-	 * @param consulta Una operación SELECT sobre la base de datos.
+	 * @param consulta La consulta SQL SELECT.
 	 *
-	 * @return Un DataModel representando el conjunto resultado de la consulta.
+	 * @param callback El callback que se ejecuta sobre el conjunto de
+	 *        de resultados que regresa la consulta SELECT.
+	 *
+	 * @return Un entero representando si la operación se realizó con éxito
+	 *         (Sqlite.OK) o no.
 	 */
-	public DataModel realiza_consulta_select (string consulta)
-	throws Error
-	requires (conn.is_opened ())
+	public int realiza_consulta_select (string consulta,
+										Sqlite.Callback? callback)
 	{
-		return conn.execute_select_command (consulta);
-	}
-
-	/**
-	 * Cierra la actual conexión.
-	 *
-	 * Cierra la actual conexión a la base de datos.
-	 */
-	public void cierra_conexion ()
-	requires (conn.is_opened ())
-	{
-		conn.close();
+		return db.exec (consulta, callback, out errmsg);
 	}
 	
 }
