@@ -1,7 +1,32 @@
 using M.Tablas;
 
+/**
+ * Clase para crear consultas (strings SQL) para operaciones NO SELECT sobre una
+ * base de datos.
+ *
+ * Las instancias de esta clase pueden crear strings que contienen consultas
+ * SQL para realizar operaciones NO SELECT sobre una base de datos, como son:
+ *
+ *  * DELETE
+ *  * UPDATE
+ *  * INSERT
+ *  * Crear relaciones entre tablas.
+ *
+ * Se pueden agregar, actualizar o eliminar:
+ *
+ *  * Videojuegos
+ *  * Desarrolladoras
+ *  * Publicadoras
+ *  * Consolas
+ *
+ * Las relaciones que se pueden crear son:
+ *
+ *  * Desarrolla para (relaciona una desarrolladora con una consola)
+ *  * Publica para (relaciona una publicadora con una consola)
+ *  * Disponible para (relaciona un videojuego con una consola)
+ */
 public class M.Consultas : GLib.Object {
-
+	
 	/**
 	 * Crea una consulta SQL para agregar un videojuego a la base de datos.
 	 *
@@ -26,8 +51,8 @@ public class M.Consultas : GLib.Object {
 		if (nombre == "" || desarrolladora == "" || publicadora == "") {
 			return null;
 		}
-		motor = (motor == null || motor == "") ? "NULL" : @"\"$motor\"";
-		string query = @"INSERT INTO videojuegos (nombre, motor, dev, pub) VALUES (\"$nombre\", $motor, \"$desarrolladora\", \"$publicadora\");";
+		string m = (motor == null || motor == "") ? "NULL" : @"\"$motor\"";
+		string query = @"INSERT INTO videojuegos (nombre, motor, dev, pub) VALUES (\"$nombre\", $m, \"$desarrolladora\", \"$publicadora\");";
 		return query;
 	}
 
@@ -57,10 +82,10 @@ public class M.Consultas : GLib.Object {
 		if (nombre == "") {
 			return null;
 		}
-		sede = (sede == null || sede == "") ? "NULL" : @"\"$sede\"";
-		fundacion = (fundacion == null || fundacion == "") ?
+		string s = (sede == null || sede == "") ? "NULL" : @"\"$sede\"";
+		string f = (fundacion == null || fundacion == "") ?
 			"NULL" : @"\"$fundacion\"";
-		string query = @"INSERT INTO desarrolladoras (nombre, sede, activo, fundacion) VALUES (\"$nombre\", $sede, $activo, $fundacion);";
+		string query = @"INSERT INTO desarrolladoras (nombre, sede, activo, fundacion) VALUES (\"$nombre\", $s, $activo, $f);";
 		return query;
 	}
 
@@ -89,10 +114,10 @@ public class M.Consultas : GLib.Object {
 		if (nombre == "") {
 			return null;
 		}
-		sede = (sede == null || sede == "") ? "NULL" : @"\"$sede\"";
-		fundacion = (fundacion == null || fundacion == "") ?
+		string s = (sede == null || sede == "") ? "NULL" : @"\"$sede\"";
+		string f = (fundacion == null || fundacion == "") ?
 			"NULL" : @"\"$fundacion\"";
-		string query = @"INSERT INTO publicadoras (nombre, sede, activo, fundacion) VALUES (\"$nombre\", $sede, $activo, $fundacion);";
+		string query = @"INSERT INTO publicadoras (nombre, sede, activo, fundacion) VALUES (\"$nombre\", $s, $activo, $f);";
 		return query;
 	}
 
@@ -123,10 +148,10 @@ public class M.Consultas : GLib.Object {
 		if (nombre == "" || fabricante == "") {
 			return null;
 		}
-		cpu = (cpu == null || cpu == "") ? "NULL" : @"\"$cpu\"";
-		lanzamiento = (lanzamiento == null || lanzamiento == "") ?
+		string c = (cpu == null || cpu == "") ? "NULL" : @"\"$cpu\"";
+		string l = (lanzamiento == null || lanzamiento == "") ?
 			"NULL" : @"\"$lanzamiento\"";
-		string query = @"INSERT INTO consolas (nombre, fabricante, gen, cpu, lanzamiento) VALUES (\"$nombre\", \"$fabricante\", $gen, $cpu, $lanzamiento);";
+		string query = @"INSERT INTO consolas (nombre, fabricante, gen, cpu, lanzamiento) VALUES (\"$nombre\", \"$fabricante\", $gen, $c, $l);";
 		return query;
 	}
 
@@ -155,7 +180,7 @@ public class M.Consultas : GLib.Object {
 		if (nombre == "") {
 			return null;
 		}
-		valor = (valor == null || valor == "") ?
+		string v = (valor == null || valor == "") ?
 			"NULL" : @"\"$valor\"";
 		string col = ""; //para evitar advertencias del compilador
 		switch (columna) {
@@ -169,7 +194,7 @@ public class M.Consultas : GLib.Object {
 			col = "publicadora";
 			break;
 		}
-		string query = @"UPDATE videojuegos SET $col = $valor WHERE nombre = \"$nombre\";";
+		string query = @"UPDATE videojuegos SET $col = $v WHERE nombre = \"$nombre\";";
 		return query;
 	}
 
@@ -196,17 +221,18 @@ public class M.Consultas : GLib.Object {
 								   string? valor)
 	requires (columna != Desarrolladoras.NOMBRE)
 	{
+		string v = "";
 		if (nombre == "") {
 			return null;
 		}
 		if (valor == null || valor == "") {
-			valor = "NULL";
+			v = "NULL";
 		} else {
 			if (columna == Desarrolladoras.ACTIVO) {
 				int val = int.parse (valor);
 				assert (val == 0 || val == 1);
 			} else {
-				valor = @"\"$valor\"";
+				v = @"\"$valor\"";
 			}
 		}
 		string col = ""; //para evitar advertencias del compilador
@@ -221,7 +247,7 @@ public class M.Consultas : GLib.Object {
 			col = "fundacion";
 			break;
 		}
-		string query = @"UPDATE desarrolladoras SET $col = $valor WHERE nombre = \"$nombre\";";
+		string query = @"UPDATE desarrolladoras SET $col = $v WHERE nombre = \"$nombre\";";
 		return query;
 	}
 
@@ -248,17 +274,18 @@ public class M.Consultas : GLib.Object {
 								   string? valor)
 	requires (columna != Publicadoras.NOMBRE)
 	{
+		string v = "";
 		if (nombre == "") {
 			return null;
 		}
 		if (valor == null || valor == "") {
-			valor = "NULL";
+			v = "NULL";
 		} else {
 			if (columna == Publicadoras.ACTIVO) {
 				int val = int.parse (valor);
 				assert (val == 0 || val == 1);
 			} else {
-				valor = @"\"$valor\"";
+				v = @"\"$valor\"";
 			}
 		}
 		string col = ""; //para evitar advertencias del compilador
@@ -266,14 +293,14 @@ public class M.Consultas : GLib.Object {
 		case Publicadoras.SEDE :
 			col = "sede";
 			break;
-		case Publicadoras.ACTIVO	:
+		case Publicadoras.ACTIVO :
 			col = "activo";
 			break;
 		case Publicadoras.FUNDACION :
 			col = "fundacion";
 			break;
 		}
-		string query = @"UPDATE publicadoras SET $col = $valor WHERE nombre = \"$nombre\";";
+		string query = @"UPDATE publicadoras SET $col = $v WHERE nombre = \"$nombre\";";
 		return query;
 	}
 
@@ -295,22 +322,22 @@ public class M.Consultas : GLib.Object {
 	 *
 	 * @return La consulta SQL para actualizar una consola de la base de datos.
 	 */
-
 	public string? actualizar_con (string nombre, Consolas columna,
 								   string? valor)
 	requires (columna != Consolas.NOMBRE)
 	{
+		string v = "";
 		if (nombre == "") {
 			return null;
 		}
 		if (valor == null || valor == "") {
-			valor = "NULL";
+			v = "NULL";
 		} else {
 			if (columna == Consolas.GENERACION) {
 				int val = int.parse (valor);
 				assert (val >= 0);
 			} else {
-				valor = @"\"$valor\"";
+				v = @"\"$valor\"";
 			}
 		}
 		string col = ""; //para evitar advertencias del compilador
@@ -328,7 +355,7 @@ public class M.Consultas : GLib.Object {
 			col = "lanzamiento";
 			break;
 		}
-		string query = @"UPDATE consolas SET $col = $valor WHERE nombre = \"$nombre\";";
+		string query = @"UPDATE consolas SET $col = $v WHERE nombre = \"$nombre\";";
 		return query;
 	}
 
@@ -428,7 +455,7 @@ public class M.Consultas : GLib.Object {
 	 *
 	 * @param consola El nombre de la consola.
 	 *
-	 * @return La consulta SQl para relacionar una desarrolladora y una consola.
+	 * @return La consulta SQL para relacionar una desarrolladora y una consola.
 	 */
 	public string? relaciona_dev (string desarrolladora, string consola)
 	{
@@ -450,7 +477,7 @@ public class M.Consultas : GLib.Object {
 	 *
 	 * @param consola El nombre de la consola.
 	 *
-	 * @return La consulta SQl para relacionar una publicadora y una consola.
+	 * @return La consulta SQL para relacionar una publicadora y una consola.
 	 */
 	public string? relaciona_pub (string publicadora, string consola)
 	{
@@ -472,7 +499,7 @@ public class M.Consultas : GLib.Object {
 	 *
 	 * @param consola El nombre de la consola.
 	 *
-	 * @return La consulta SQl para relacionar un videojuego y una consola.
+	 * @return La consulta SQL para relacionar un videojuego y una consola.
 	 */
 	public string? relaciona_vj (string videojuego, string consola)
 	{
