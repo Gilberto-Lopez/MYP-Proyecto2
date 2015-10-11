@@ -21,9 +21,11 @@
   <object class="GtkDialog" id="dialog_delete">
     <property name="can_focus">False</property>
     <property name="resizable">False</property>
+    <property name="modal">True</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="urgency_hint">True</property>
+    <property name="deletable">False</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox4">
         <property name="can_focus">False</property>
@@ -33,9 +35,10 @@
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area5">
             <property name="can_focus">False</property>
+            <property name="homogeneous">True</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="button5">
+              <object class="GtkButton" id="button_del_aceptar">
                 <property name="label" translatable="yes">Aceptar</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -50,7 +53,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button6">
+              <object class="GtkButton" id="button_del_cancelar">
                 <property name="label" translatable="yes">Cancelar</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -93,6 +96,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
+                <property name="spacing">3</property>
+                <property name="homogeneous">True</property>
                 <child>
                   <object class="GtkLabel" id="label27">
                     <property name="visible">True</property>
@@ -106,7 +111,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label_delete">
+                  <object class="GtkLabel" id="label_del_elemento">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <attributes>
@@ -164,21 +169,26 @@
     <property name="can_focus">False</property>
     <property name="stock">gtk-apply</property>
   </object>
-  <object class="GtkDialog" id="dialog_add_vj">
+  <object class="GtkDialog" id="dialog_vg_add">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Agregar Videojuego</property>
+    <property name="resizable">False</property>
+    <property name="modal">True</property>
     <property name="type_hint">dialog</property>
+    <property name="skip_taskbar_hint">True</property>
+    <property name="urgency_hint">True</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog_box">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
+        <property name="spacing">5</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
+            <property name="homogeneous">True</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="boton_agrega_vj_aceptar">
+              <object class="GtkButton" id="button_vg_add_aceptar">
                 <property name="label" translatable="yes">Aceptar</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -193,7 +203,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="boton_agrega_vj_cancelar">
+              <object class="GtkButton" id="button_vg_add_cancelar">
                 <property name="label" translatable="yes">Cancelar</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -237,8 +247,9 @@
               <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">2</property>
+                <property name="row_spacing">5</property>
                 <property name="column_spacing">5</property>
+                <property name="row_homogeneous">True</property>
                 <child>
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
@@ -300,7 +311,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="entry1">
+                  <object class="GtkEntry" id="text_vg_nombre">
                     <property name="width_request">300</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -312,7 +323,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="entry2">
+                  <object class="GtkEntry" id="text_vg_dev">
                     <property name="width_request">300</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -323,7 +334,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="entry3">
+                  <object class="GtkEntry" id="text_vg_pub">
                     <property name="width_request">300</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -334,7 +345,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="entry4">
+                  <object class="GtkEntry" id="text_vg_motor">
                     <property name="width_request">300</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -345,7 +356,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="entry5">
+                  <object class="GtkEntry" id="text_vg_consolas">
                     <property name="width_request">300</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -393,21 +404,26 @@
     <property name="can_focus">False</property>
     <property name="stock">gtk-cancel</property>
   </object>
-  <object class="GtkDialog" id="dialog_add_dev">
+  <object class="GtkDialog" id="dialog_dev_add">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Agregar Desarrolladora</property>
+    <property name="resizable">False</property>
+    <property name="modal">True</property>
     <property name="type_hint">dialog</property>
+    <property name="skip_taskbar_hint">True</property>
+    <property name="urgency_hint">True</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
+        <property name="spacing">5</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area2">
             <property name="can_focus">False</property>
+            <property name="homogeneous">True</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="boton_agrega_dev_aceptar">
+              <object class="GtkButton" id="button_dev_add_aceptar">
                 <property name="label" translatable="yes">Aceptar</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -422,7 +438,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="boton_agrega_dev_cancelar">
+              <object class="GtkButton" id="button_dev_add_cancelar">
                 <property name="label" translatable="yes">Cancelar</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -466,7 +482,7 @@
               <object class="GtkGrid" id="grid3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">2</property>
+                <property name="row_spacing">5</property>
                 <property name="column_spacing">5</property>
                 <property name="row_homogeneous">True</property>
                 <child>
@@ -518,7 +534,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="entry6">
+                  <object class="GtkEntry" id="test_dev_nombre">
                     <property name="width_request">300</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -529,7 +545,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="entry7">
+                  <object class="GtkEntry" id="text_dev_sede">
                     <property name="width_request">300</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -540,10 +556,12 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="entry9">
+                  <object class="GtkEntry" id="text_dev_fundacion">
                     <property name="width_request">300</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="max_length">10</property>
+                    <property name="max_width_chars">10</property>
                     <property name="text" translatable="yes">YYYY-MM-DD</property>
                   </object>
                   <packing>
@@ -555,18 +573,18 @@
                   <object class="GtkBox" id="box6">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="spacing">2</property>
+                    <property name="spacing">5</property>
                     <property name="homogeneous">True</property>
                     <child>
-                      <object class="GtkRadioButton" id="radiobutton1">
+                      <object class="GtkRadioButton" id="radio_dev_activo_y">
                         <property name="label" translatable="yes">Sí</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="xalign">0.25</property>
+                        <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">radiobutton2</property>
+                        <property name="group">radio_dev_activo_n</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -575,15 +593,14 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioButton" id="radiobutton2">
+                      <object class="GtkRadioButton" id="radio_dev_activo_n">
                         <property name="label" translatable="yes">No</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="xalign">0.20000000298023224</property>
-                        <property name="active">True</property>
+                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">radiobutton1</property>
+                        <property name="group">radio_dev_activo_y</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -640,18 +657,23 @@
   <object class="GtkDialog" id="dialog_add_pub">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Agregar Publicadora</property>
+    <property name="resizable">False</property>
+    <property name="modal">True</property>
     <property name="type_hint">dialog</property>
+    <property name="skip_taskbar_hint">True</property>
+    <property name="urgency_hint">True</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox2">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
+        <property name="spacing">5</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area3">
             <property name="can_focus">False</property>
+            <property name="homogeneous">True</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="button1">
+              <object class="GtkButton" id="button_pub_add_aceptar">
                 <property name="label" translatable="yes">Aceptar</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -666,7 +688,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button2">
+              <object class="GtkButton" id="button_pub_add_cancelar">
                 <property name="label" translatable="yes">Cancelar</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -710,7 +732,7 @@
               <object class="GtkGrid" id="grid4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">2</property>
+                <property name="row_spacing">5</property>
                 <property name="column_spacing">5</property>
                 <property name="row_homogeneous">True</property>
                 <child>
@@ -763,7 +785,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="entry10">
+                  <object class="GtkEntry" id="text_pub_nombre">
                     <property name="width_request">300</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -774,7 +796,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="entry11">
+                  <object class="GtkEntry" id="text_pub_sede">
                     <property name="width_request">300</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -785,10 +807,12 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="entry13">
+                  <object class="GtkEntry" id="text_pub_fundacion">
                     <property name="width_request">300</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="max_length">10</property>
+                    <property name="max_width_chars">10</property>
                     <property name="text" translatable="yes">YYYY-MM-DD</property>
                   </object>
                   <packing>
@@ -803,15 +827,15 @@
                     <property name="spacing">2</property>
                     <property name="homogeneous">True</property>
                     <child>
-                      <object class="GtkRadioButton" id="radiobutton3">
+                      <object class="GtkRadioButton" id="radio_pub_activo_y">
                         <property name="label" translatable="yes">Sí</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="xalign">0.25</property>
+                        <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">radiobutton4</property>
+                        <property name="group">radio_pub_activo_n</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -820,15 +844,14 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioButton" id="radiobutton4">
+                      <object class="GtkRadioButton" id="radio_pub_activo_n">
                         <property name="label" translatable="yes">No</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="xalign">0.25</property>
-                        <property name="active">True</property>
+                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">radiobutton3</property>
+                        <property name="group">radio_pub_activo_y</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -885,18 +908,23 @@
   <object class="GtkDialog" id="dialog_add_con">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Agregar Consola</property>
+    <property name="resizable">False</property>
+    <property name="modal">True</property>
     <property name="type_hint">dialog</property>
+    <property name="skip_taskbar_hint">True</property>
+    <property name="urgency_hint">True</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox3">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
+        <property name="spacing">5</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area4">
             <property name="can_focus">False</property>
+            <property name="homogeneous">True</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="button3">
+              <object class="GtkButton" id="button_con_add_aceptar">
                 <property name="label" translatable="yes">Aceptar</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -911,7 +939,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button4">
+              <object class="GtkButton" id="putton_con_add_cancelar">
                 <property name="label" translatable="yes">Cancelar</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -955,7 +983,7 @@
               <object class="GtkGrid" id="grid5">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">2</property>
+                <property name="row_spacing">5</property>
                 <property name="column_spacing">5</property>
                 <property name="row_homogeneous">True</property>
                 <child>
@@ -1019,7 +1047,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="entry8">
+                  <object class="GtkEntry" id="text_con_nombre">
                     <property name="width_request">300</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -1030,7 +1058,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="entry12">
+                  <object class="GtkEntry" id="text_con_fabricante">
                     <property name="width_request">300</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -1041,11 +1069,13 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="entry14">
+                  <object class="GtkEntry" id="text_con_generacion">
                     <property name="width_request">300</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="input_purpose">number</property>
+                    <property name="max_length">1</property>
+                    <property name="max_width_chars">1</property>
+                    <property name="input_purpose">digits</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -1053,7 +1083,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="entry15">
+                  <object class="GtkEntry" id="text_con_cpu">
                     <property name="width_request">300</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -1064,10 +1094,12 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="entry16">
+                  <object class="GtkEntry" id="text_con_lanzamiento">
                     <property name="width_request">300</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="max_length">10</property>
+                    <property name="max_width_chars">10</property>
                     <property name="text" translatable="yes">YYYY-MM-DD</property>
                   </object>
                   <packing>
@@ -1110,19 +1142,33 @@
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Proyecto 2</property>
     <property name="default_width">700</property>
-    <property name="default_height">500</property>
-    <signal name="destroy" handler="gtk_main_quit" swapped="no"/>
+    <property name="default_height">600</property>
     <child>
       <object class="GtkBox" id="box1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
+        <property name="spacing">5</property>
         <property name="baseline_position">top</property>
-        <signal name="destroy" handler="gtk_main_quit" swapped="no"/>
         <child>
           <object class="GtkGrid" id="grid6">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
             <child>
               <placeholder/>
             </child>
@@ -1148,7 +1194,7 @@
             <property name="can_focus">True</property>
             <property name="shadow_type">in</property>
             <child>
-              <object class="GtkTreeView" id="treeview_tables">
+              <object class="GtkTreeView" id="treeview_tables_area">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="model">liststore_tables</property>
@@ -1160,7 +1206,7 @@
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
+            <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
@@ -1169,7 +1215,7 @@
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="column_homogeneous">True</property>
+            <property name="row_homogeneous">True</property>
             <child>
               <object class="GtkButtonBox" id="buttonbox1">
                 <property name="visible">True</property>
@@ -1178,7 +1224,7 @@
                 <property name="homogeneous">True</property>
                 <property name="layout_style">end</property>
                 <child>
-                  <object class="GtkButton" id="boton_busca">
+                  <object class="GtkButton" id="button_search">
                     <property name="label" translatable="yes">Buscar</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -1193,7 +1239,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText" id="combo_box_agrega">
+                  <object class="GtkComboBoxText" id="combobox_add">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="active_id">add</property>
@@ -1213,12 +1259,12 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
+                <property name="left_attach">2</property>
                 <property name="top_attach">0</property>
               </packing>
             </child>
             <child>
-              <object class="GtkSpinner" id="spinner1">
+              <object class="GtkSpinner" id="spinner_search_active">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
               </object>
@@ -1226,6 +1272,9 @@
                 <property name="left_attach">0</property>
                 <property name="top_attach">0</property>
               </packing>
+            </child>
+            <child>
+              <placeholder/>
             </child>
           </object>
           <packing>
