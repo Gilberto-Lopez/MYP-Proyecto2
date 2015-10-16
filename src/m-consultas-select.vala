@@ -1,9 +1,17 @@
 using M.Tablas;
 using Sqlite;
 
+/**
+ * Clase para realizar consultas SQL para operaciones SELECT sobre una base de
+ * datos.
+ *
+ * Las instancias de esta clase pueden reaizar consultas SELECT sobre una base
+ * de datos para buscar videojuegos, consolas, desarrolladoras, publicadoras.
+ */
 public class M.ConsultasSelect : GLib.Object {
 
 	private BaseDatos db;
+	//Queries para usar en Prepared Statements.
 	private const string vj = "SELECT nombre FROM videojuegos WHERE nombre = $NOM;";
 	private const string dev = "SELECT nombre FROM desarrolladoras WHERE nombre = $NOM;";
 	private const string pub = "SELECT nombre FROM publicadoras WHERE nombre = $NOM;";

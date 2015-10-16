@@ -66,9 +66,9 @@ public class M.BaseDatos : GLib.Object {
 	 * @return Un entero representando si la operación se realizó con éxito
 	 *         (Sqlite.OK) o no.
 	 */
-	public int abre_conexion ()
+	public int abre_conexion (string archivo)
 	{
-		int ec = Database.open ("DataBase.db", out db);
+		int ec = Database.open (archivo, out db);
 		if (ec != Sqlite.OK) {
 			return db.errcode ();
 		}
