@@ -3,8 +3,8 @@ using Sqlite;
 /**
  * Clase para administrar la conexión a una base de datos.
  *
- * La conexión se realiza a una base de datos "DataBase.db" por defecto con el
- * método {@link abre_conexion}. La conexión tiene por defecto activas las 
+ * La conexión se realiza a una base de datos con el método
+ * {@link abre_conexion}. La conexión tiene por defecto activas las 
  * restricciones de [[https://www.sqlite.org/foreignkeys.html|claves foráneas]],
  * y establece el tiempo de espera
  * ([[https://www.sqlite.org/pragma.html#pragma_busy_timeout|busy timeout]])
@@ -24,7 +24,12 @@ public class M.BaseDatos : GLib.Object {
 	//Administrador de la base de datos.
 	private static BaseDatos bd = null;
 	private Database db;
-	private string errmsg;
+
+	/**
+	 * Si ocurre un error al realizar una operación sobre la base de datos,
+	 * esta propiedad guarda el mensaje de error.
+	 */
+	public string errmsg { get; private set; }
 
 	//Constructor vacío, privado para evitar que esta clase pueda ser
 	//instanciada
@@ -63,6 +68,8 @@ public class M.BaseDatos : GLib.Object {
 	 * realizó con éxito o no. Para más información sobre el valor de retorno
 	 * véase [[https://www.sqlite.org/capi3ref.html#SQLITE_ABORT|Result Codes]].
 	 *
+	 * @param archivo El nombre del archivo que guarda la base de datos.
+	 * 
 	 * @return Un entero representando si la operación se realizó con éxito
 	 *         (Sqlite.OK) o no.
 	 */
@@ -73,7 +80,9 @@ public class M.BaseDatos : GLib.Object {
 			return db.errcode ();
 		}
 		//Neciesitamos claves foráneas.
-		ec = db.exec ("PRAGMA foreign_keys = ON;", null, out errmsg);
+		string err;
+		ec = db.exec ("PRAGMA foreign_keys = ON;", null, out err);
+		errmsg = err;
 		if (ec != Sqlite.OK) {
 			return ec;
 		}
@@ -96,7 +105,10 @@ public class M.BaseDatos : GLib.Object {
 	 */
 	public int realiza_consulta (string consulta)
 	{
-		return db.exec (consulta, null, out errmsg);
+		string err;
+		int e = db.exec (consulta, null, out err);
+		errmsg = err;
+		return e;
 	}
 
 	/**
@@ -118,7 +130,10 @@ public class M.BaseDatos : GLib.Object {
 	public int realiza_consulta_select (string consulta,
 										Sqlite.Callback? callback = null)
 	{
-		return db.exec (consulta, callback, out errmsg);
+		string err;
+		int e = db.exec (consulta, callback, out err);
+		errmsg = err;
+		return e;
 	}
 
 	/**

@@ -6,7 +6,7 @@ namespace M.Tablas {
 	 * Contiene los campos de la tabla 'videojuegos' de la base de datos. Cada
 	 * columna tiene un tipo de dato en la base de datos.
 	 *
-	 * || "columna" || "tipo" ||
+	 * || "Columna" || "Tipo" ||
 	 * || nombre || TEXT ||
 	 * || motor || TEXT ||
 	 * || dev (desarrolladora) || TEXT ||
@@ -39,7 +39,7 @@ namespace M.Tablas {
 	 * Contiene los campos de la tabla 'desarrolladoras' de la base de datos.
 	 * Cada columna tiene un tipo de dato en la base de datos.
 	 *
-	 * || "columna" || "tipo" ||
+	 * || "Columna" || "Tipo" ||
 	 * || nombre || TEXT ||
 	 * || sede || TEXT ||
 	 * || activo || INTEGER  ||
@@ -71,7 +71,7 @@ namespace M.Tablas {
 	 * Contiene los campos de la tabla 'publicadoras' de la base de datos. Cada
 	 * columna tiene un tipo de dato en la base de datos.
 	 *
-	 * || "columna" || "tipo" ||
+	 * || "Columna" || "Tipo" ||
 	 * || nombre || TEXT ||
 	 * || sede || TEXT ||
 	 * || activo || INTEGER ||
@@ -102,7 +102,7 @@ namespace M.Tablas {
 	 * Contiene los campos de la tabla 'consolas' de la base de datos. Cada
 	 * columna tiene un tipo de dato en la base de datos.
 	 *
-	 * || "columna" || "tipo" ||
+	 * || "Columna" || "Tipo" ||
 	 * || nombre || TEXT ||
 	 * || fabricante || TEXT ||
 	 * || gen (generación) || INTEGER ||
