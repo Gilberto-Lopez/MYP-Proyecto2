@@ -18,6 +18,7 @@
     <property name="title" translatable="yes">Proyecto 2</property>
     <property name="default_width">700</property>
     <property name="default_height">600</property>
+    <property name="icon_name">binary</property>
     <signal name="destroy" handler="gtk_main_quit" swapped="no"/>
     <child>
       <object class="GtkBox" id="box1">
@@ -186,8 +187,10 @@
   </object>
   <object class="GtkDialog" id="dialog_delete">
     <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Eliminar</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
+    <property name="icon_name">edit-delete</property>
     <property name="type_hint">normal</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="urgency_hint">True</property>
@@ -335,6 +338,8 @@
   </object>
   <object class="GtkDialog" id="dialog_update">
     <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Actualizar</property>
+    <property name="icon_name">dialog-question</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox7">
@@ -354,6 +359,7 @@
                 <property name="receives_default">True</property>
                 <property name="image">image14</property>
                 <property name="always_show_image">True</property>
+                <signal name="clicked" handler="c_controlador_on_update_accept_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -486,6 +492,7 @@
     <property name="title" translatable="yes">Agregar Videojuego</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
+    <property name="icon_name">list-add</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="urgency_hint">True</property>
@@ -724,6 +731,7 @@
     <property name="title" translatable="yes">Agregar Desarrolladora</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
+    <property name="icon_name">list-add</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="urgency_hint">True</property>
@@ -902,7 +910,6 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">radio_dev_activo_n</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -978,6 +985,7 @@
     <property name="title" translatable="yes">Agregar Publicadora</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
+    <property name="icon_name">list-add</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="urgency_hint">True</property>
@@ -1157,7 +1165,6 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">radio_pub_activo_n</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1233,6 +1240,7 @@
     <property name="title" translatable="yes">Agregar Consola</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
+    <property name="icon_name">list-add</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="urgency_hint">True</property>
