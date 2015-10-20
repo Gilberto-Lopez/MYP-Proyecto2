@@ -48,7 +48,7 @@ public class V.Interfaz {
 		try {
 			builder.add_from_file (archivo);
 		} catch (Error e) {
-			return -1;
+			return 1;
 		}
 		builder.connect_signals (controlador);
 
