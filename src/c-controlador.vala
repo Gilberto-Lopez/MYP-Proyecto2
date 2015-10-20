@@ -2,7 +2,7 @@ using Gtk;
 using M;
 using V;
 
-public class C.Controlador {
+public class C.Controlador : GLib.Object {
 
 	private const string consolas_default = "consola1, consola2, ...";
 	private const string fecha_default = "YYYY-MM-DD";
@@ -30,8 +30,7 @@ public class C.Controlador {
 	public void on_delete_accept_clicked (Button source)
 	{
 		//eliminamos de la base de datos
-		interfaz.dialog_delete.hide ();
-		interfaz.label_del_elemento.set_label ("");
+		on_delete_cancel_clicked (source);
 	}
 
 	//Add game dialog-----------------------------------------------------------
@@ -50,13 +49,32 @@ public class C.Controlador {
 	[CCode (instance_pos = -1)]
 	public void on_add_vg_accept_clicked (Button source)
 	{
-		//agregamos
-		interfaz.dialog_vg_add.hide ();
-		interfaz.text_vg_nombre.set_text ("");
-		interfaz.text_vg_dev.set_text ("");
-		interfaz.text_vg_pub.set_text ("");
-		interfaz.text_vg_motor.set_text ("");
-		interfaz.text_vg_consolas.set_text (consolas_default);
+		if (interfaz.text_vg_nombre.get_text () == "" ||
+			interfaz.text_vg_dev.get_text () == "" ||
+			interfaz.text_vg_pub.get_text () == "" ||
+			interfaz.text_vg_consolas.get_text () == "") {
+			return;
+		}
+		int s;
+		string nombre = interfaz.text_vg_nombre.get_text ().replace ("\"", "'");
+		string motor = interfaz.text_vg_motor.get_text ().replace ("\"", "'");
+		string dev = interfaz.text_vg_dev.get_text ().replace ("\"", "'");
+		string pub = interfaz.text_vg_pub.get_text ().replace ("\"", "'");
+		string[] consolas = interfaz.text_vg_consolas.get_text ().replace ("\"", "'").split (", ");
+		bool e = modelo.consultas_select.existe_vg (nombre, out s);
+		if (s != Sqlite.OK) {
+			interfaz.label_state.set_text (@"No ha sido posible agregar $nombre.");
+		} else if (e) {
+			int update;
+			interfaz.label_update_elemento.set_text (nombre);
+			update = interfaz.dialog_update.run ();
+			if (update == 1) {
+				
+			}
+		} else {
+
+		}
+		on_add_vg_cancel_clicked (source);
 	}
 
 	//Developer add dialog------------------------------------------------------
@@ -85,17 +103,10 @@ public class C.Controlador {
 		if (s != Sqlite.OK) {
 			interfaz.label_state.set_text (@"No ha sido posible agregar $nombre.");
 		} else if (e) {
-			bool update = false;
+			int update;
 			interfaz.label_update_elemento.set_text (nombre);
-			interfaz.button_update_y.clicked.connect (
-				() => {
-					update = true;
-					interfaz.dialog_update.hide ();
-					interfaz.label_update_elemento.set_text ("");
-				}
-			);
-			interfaz.dialog_update.show_all ();
-			if (update) {
+			update = interfaz.dialog_update.run ();
+			if (update == 1) {
 				string? _sede = modelo.consultas_no_select.actualizar_dev (nombre, Tablas.Desarrolladoras.SEDE, sede);
 				string? _fundacion = modelo.consultas_no_select.actualizar_dev (nombre, Tablas.Desarrolladoras.FUNDACION, fundacion);
 				string? _activo = modelo.consultas_no_select.actualizar_dev (nombre, Tablas.Desarrolladoras.ACTIVO, activo.to_string ());
@@ -110,10 +121,7 @@ public class C.Controlador {
 				interfaz.label_state.set_text (@"No ha sido posible agregar $nombre.");
 			}
 		}
-		interfaz.dialog_dev_add.hide ();
-		interfaz.text_dev_nombre.set_text ("");
-		interfaz.text_dev_sede.set_text ("");
-		interfaz.text_dev_fundacion.set_text (fecha_default);
+		on_add_dev_cancel_clicked (source);
 	}
 
 	//Publisher add dialog------------------------------------------------------
@@ -142,17 +150,10 @@ public class C.Controlador {
 		if (s != Sqlite.OK) {
 			interfaz.label_state.set_text (@"No ha sido posible agregar $nombre.");
 		} else if (e) {
-			bool update = false;
+			int update;
 			interfaz.label_update_elemento.set_text (nombre);
-			interfaz.button_update_y.clicked.connect (
-				() => {
-					update = true;
-					interfaz.dialog_update.hide ();
-					interfaz.label_update_elemento.set_text ("");
-				}
-			);
-			interfaz.dialog_update.show_all ();
-			if (update) {
+			update = interfaz.dialog_update.run ();
+			if (update == 1) {
 				string? _sede = modelo.consultas_no_select.actualizar_pub (nombre, Tablas.Publicadoras.SEDE, sede);
 				string? _fundacion = modelo.consultas_no_select.actualizar_pub (nombre, Tablas.Publicadoras.FUNDACION, fundacion);
 				string? _activo = modelo.consultas_no_select.actualizar_pub (nombre, Tablas.Publicadoras.ACTIVO, activo.to_string ());
@@ -167,10 +168,7 @@ public class C.Controlador {
 				interfaz.label_state.set_text (@"No ha sido posible agregar $nombre.");
 			}
 		}
-		interfaz.dialog_pub_add.hide ();
-		interfaz.text_pub_nombre.set_text ("");
-		interfaz.text_pub_sede.set_text ("");
-		interfaz.text_pub_fundacion.set_text (fecha_default);
+		on_add_pub_cancel_clicked (source);
 	}
 
 	//Console add dialog--------------------------------------------------------
@@ -203,17 +201,10 @@ public class C.Controlador {
 		if (s != Sqlite.OK) {
 			interfaz.label_state.set_text (@"No ha sido posible agregar $nombre.");
 		} else if (e) {
-			bool update = false;
+			int update;
 			interfaz.label_update_elemento.set_text (nombre);
-			interfaz.button_update_y.clicked.connect (
-				() => {
-					update = true;
-					interfaz.dialog_update.hide ();
-					interfaz.label_update_elemento.set_text ("");
-				}
-			);
-			interfaz.dialog_update.show_all ();
-			if (update) {
+			update = interfaz.dialog_update.run ();
+			if (update == 1) {
 				string? _fabricante = modelo.consultas_no_select.actualizar_con (nombre, Tablas.Consolas.FABRICANTE, fabricante);
 				string? _cpu = modelo.consultas_no_select.actualizar_con (nombre, Tablas.Consolas.CPU, cpu);
 				string? _lanzamiento = modelo.consultas_no_select.actualizar_con (nombre, Tablas.Consolas.LANZAMIENTO, lanzamiento);
@@ -230,12 +221,7 @@ public class C.Controlador {
 				interfaz.label_state.set_text (@"No ha sido posible agregar $nombre.");
 			}
 		}
-		interfaz.dialog_con_add.hide ();
-		interfaz.text_con_nombre.set_text ("");
-		interfaz.text_con_fabricante.set_text ("");
-		interfaz.text_con_cpu.set_text ("");
-		interfaz.text_con_lanzamiento.set_text ("");
-		interfaz.spinbutton_con_generacion.set_value (0);
+		on_add_con_cancel_clicked (source);
 	}
 
 	//Main window---------------------------------------------------------------
@@ -271,6 +257,15 @@ public class C.Controlador {
 	[CCode (instance_pos = -1)]
 	public void on_update_cancel_clicked (Button source)
 	{
+		interfaz.dialog_update.response (0);
+		interfaz.dialog_update.hide ();
+		interfaz.label_update_elemento.set_text ("");
+	}
+
+	[CCode (instance_pos = -1)]
+	public void on_update_accept_clicked (Button source)
+	{
+		interfaz.dialog_update.response (1);
 		interfaz.dialog_update.hide ();
 		interfaz.label_update_elemento.set_text ("");
 	}
