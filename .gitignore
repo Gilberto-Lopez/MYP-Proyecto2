@@ -1,7 +1,7 @@
-Archivos temporales de Emacs
+# Archivos temporales de Emacs
 **/*~
 
 **/#*#
 
-#Directorio build/
-build/
+# Ejecutable main
+main
