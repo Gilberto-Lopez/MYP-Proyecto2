@@ -40,7 +40,8 @@ public class V.Interfaz {
 	public Label label_state;
 	public Spinner spinner_search_active;
 	public Button button_search;
-	public TreeView treeview_tables_area;
+	public Button button_clean;
+	public Viewport viewport;
 
 	public int inicia (string archivo, Controlador controlador)
 	{
@@ -56,7 +57,8 @@ public class V.Interfaz {
 		main_window = builder.get_object ("main_window") as Window;
 		spinner_search_active = builder.get_object ("spinner_search_active") as Spinner;
 		button_search = builder.get_object ("button_search") as Button;
-		treeview_tables_area = builder.get_object ("treeview_tables_area") as TreeView;
+		button_clean = builder.get_object ("button_clean") as Button;
+		viewport = builder.get_object ("viewport") as Viewport;
 		label_state = builder.get_object ("label_state") as Label;
 		
 		//Delete dialog

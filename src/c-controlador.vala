@@ -61,7 +61,7 @@ public class C.Controlador : GLib.Object {
 		string dev = interfaz.text_vg_dev.get_text ().replace ("\"", "'");
 		string pub = interfaz.text_vg_pub.get_text ().replace ("\"", "'");
 		string[] consolas = interfaz.text_vg_consolas.get_text ().replace ("\"", "'").split (", ");
-		bool e = modelo.consultas_select.existe_vg (nombre, out s);
+		bool e = modelo.consultas_select.existe_vj (nombre, out s);		
 		if (s != Sqlite.OK) {
 			interfaz.label_state.set_text (@"No ha sido posible agregar $nombre.");
 		} else if (e) {
@@ -69,10 +69,23 @@ public class C.Controlador : GLib.Object {
 			interfaz.label_update_elemento.set_text (nombre);
 			update = interfaz.dialog_update.run ();
 			if (update == 1) {
-				
+				existen_en_base (dev, pub, consolas);
+				modelo.base_datos.realiza_consulta (modelo.consultas_no_select.eliminar_vj (nombre));
+				modelo.base_datos.realiza_consulta (modelo.consultas_no_select.agrega_vj (nombre, motor, dev, pub));
+				foreach (string consola in consolas) {
+					modelo.base_datos.realiza_consulta (modelo.consultas_no_select.relaciona_vj (nombre, consola));
+				}
 			}
 		} else {
-
+			existen_en_base (dev, pub, consolas);
+			string? vg = modelo.consultas_no_select.agrega_vj (nombre, motor, dev, pub);
+			s = modelo.base_datos.realiza_consulta (vg);
+			if (s != Sqlite.OK) {
+				interfaz.label_state.set_text (@"No ha sido posible agregar $nombre.");
+			}
+			foreach (string consola in consolas) {
+				modelo.base_datos.realiza_consulta (modelo.consultas_no_select.relaciona_vj (nombre, consola));
+			}
 		}
 		on_add_vg_cancel_clicked (source);
 	}
@@ -227,6 +240,17 @@ public class C.Controlador : GLib.Object {
 	//Main window---------------------------------------------------------------
 
 	[CCode (instance_pos = -1)]
+	public void on_clean_clicked (Button source)
+	{
+		interfaz.viewport.foreach (
+			(widget) => {
+				interfaz.viewport.remove (widget);
+			}
+		);
+		interfaz.button_clean.set_sensitive (false);
+	}
+	
+	[CCode (instance_pos = -1)]
 	public void on_search_clicked (Button source)
 	{
 		return;
@@ -269,5 +293,33 @@ public class C.Controlador : GLib.Object {
 		interfaz.dialog_update.hide ();
 		interfaz.label_update_elemento.set_text ("");
 	}
+
+	//--------------------------------------------------------------------------
 	
+	private int existen_en_base (string dev, string pub, string[] con)
+	{
+		int r;
+		if (!modelo.consultas_select.existe_dev (dev, out r)) {
+			modelo.base_datos.realiza_consulta (modelo.consultas_no_select.agrega_dev (dev, null, 0, null));
+		}
+		if (!modelo.consultas_select.existe_pub (pub, out r)) {
+			modelo.base_datos.realiza_consulta (modelo.consultas_no_select.agrega_pub (pub, null, 0, null));
+		}
+		foreach (string consola in con) {
+			if (!modelo.consultas_select.existe_con (consola, out r)) {
+				modelo.base_datos.realiza_consulta (modelo.consultas_no_select.agrega_con (consola, "desconocido", 0, null, null));
+			}
+		}
+		foreach (string consola in con) {
+			if (!modelo.consultas_select.desarrolla_para (dev, consola, out r)) {
+				modelo.base_datos.realiza_consulta (modelo.consultas_no_select.relaciona_dev (dev, consola));
+			}
+		}
+		foreach (string consola in con) {
+			if (!modelo.consultas_select.publica_para (pub, consola, out r)) {
+				modelo.base_datos.realiza_consulta (modelo.consultas_no_select.relaciona_pub (pub, consola));
+			}
+		}
+		return r;
+	}
 }
