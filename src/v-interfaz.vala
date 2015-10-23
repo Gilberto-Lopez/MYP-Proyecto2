@@ -9,6 +9,12 @@ public class V.Interfaz {
 	//dialog update
 	public Dialog dialog_update;
 	public Label label_update_elemento;
+	//dialog info
+	public Dialog dialog_info;
+	public Label label_info_vg;
+	public Label label_info_dev;
+	public Label label_info_pub;
+	public Label label_info_engine;
 	//dialog_vg_add
 	public Dialog dialog_vg_add;
 	public Entry text_vg_nombre;
@@ -68,6 +74,13 @@ public class V.Interfaz {
 		//Update dialog
 		dialog_update = builder.get_object ("dialog_update") as Dialog;
 		label_update_elemento = builder.get_object ("label_update_elemento") as Label;
+
+		//Info dialog
+		dialog_info = builder.get_object ("dialog_info") as Dialog;
+		label_info_vg = builder.get_object ("label_info_vg") as Label;
+		label_info_dev = builder.get_object ("label_info_dev") as Label;
+		label_info_pub = builder.get_object ("label_info_pub") as Label;
+		label_info_engine = builder.get_object ("label_info_engine") as Label;
 
 		//Add vg dialog
 		dialog_vg_add = builder.get_object ("dialog_vg_add") as Dialog;

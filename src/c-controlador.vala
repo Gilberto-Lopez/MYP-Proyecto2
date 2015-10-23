@@ -29,7 +29,9 @@ public class C.Controlador : GLib.Object {
 	[CCode (instance_pos = -1)]
 	public void on_delete_accept_clicked (Button source)
 	{
-		//eliminamos de la base de datos
+		string vg = interfaz.label_del_elemento.get_label ();
+		string? eliminar = modelo.consultas_no_select.eliminar_vj (vg);
+		modelo.base_datos.realiza_consulta (eliminar);
 		on_delete_cancel_clicked (source);
 	}
 
@@ -242,11 +244,7 @@ public class C.Controlador : GLib.Object {
 	[CCode (instance_pos = -1)]
 	public void on_clean_clicked (Button source)
 	{
-		interfaz.viewport.foreach (
-			(widget) => {
-				interfaz.viewport.remove (widget);
-			}
-		);
+		interfaz.viewport.remove (interfaz.viewport.get_child ());
 		interfaz.button_clean.set_sensitive (false);
 	}
 	
@@ -254,6 +252,118 @@ public class C.Controlador : GLib.Object {
 	public void on_search_clicked (Button source)
 	{
 		return;
+	}
+
+	[CCode (instance_pos = -1)]
+	public void show_all (Button source)
+	{
+		var listbox = new ListBox ();
+		listbox.selection_mode = SelectionMode.SINGLE;
+		interfaz.viewport.add (listbox);
+		modelo.base_datos.realiza_consulta_select (
+			"SELECT nombre FROM videojuegos;",
+			(n_columns, values, column_names) => {
+				var row = new ListBoxRow ();
+				row.set_activatable (true);
+				var label = new Label (values[0]);
+				row.add (label);
+				listbox.add (row);
+				return 0;
+			}
+		);
+		interfaz.viewport.show_all ();
+		/*
+		listbox.row_activated.connect (
+			(row) => {
+				string vj = (row.get_child () as Label).get_label ();
+				modelo.base_datos.realiza_consulta_select ("SELECT * FROM videojuegos inner join dis_to on dis_to.vj_n = videojuegos.nombre  WHERE videojuegos.nombre = \"$vj\"", (n_columns, values, column_names) => {
+						interfaz.label_info_vg.set_label (vj);
+						int dev = 0;
+						int pub = 0;
+						int engine = 0;
+						for (int i = 0; i < n_columns; i++) {
+							if (column_names[i] == "dev"){
+								dev = i;
+							} else if (column_names[i] == "pub") {
+								pub = i;
+							} else if (column_names[i] == "motor") {
+								engine = i;
+							}
+						}
+						interfaz.label_info_dev.set_label (values[dev]);
+						interfaz.label_info_pub.set_label (values[pub]);
+						interfaz.label_info_engine.set_label (values[engine]);
+						interfaz.dialog_info.run ();
+						return 0;
+					}
+				);
+			}
+		);
+		*/
+		interfaz.button_clean.set_sensitive (true);
+	}
+	
+	[CCode (instance_pos = -1)]
+	public void show_developers (Button source)
+	{
+		var listbox = new ListBox ();
+		listbox.selection_mode = SelectionMode.SINGLE;
+		interfaz.viewport.add (listbox);
+		modelo.base_datos.realiza_consulta_select (
+			"SELECT nombre FROM desarrolladoras;",
+			(n_columns, values, column_names) => {
+				var row = new ListBoxRow ();
+				row.set_activatable (true);
+				var label = new Label (values[0]);
+				row.add (label);
+				listbox.add (row);
+				return 0;
+			}
+		);
+		interfaz.viewport.show_all ();
+		interfaz.button_clean.set_sensitive (true);
+	}
+	
+	[CCode (instance_pos = -1)]
+	public void show_publishers (Button source)
+	{
+		var listbox = new ListBox ();
+		listbox.selection_mode = SelectionMode.SINGLE;
+		interfaz.viewport.add (listbox);
+		modelo.base_datos.realiza_consulta_select (
+			"SELECT nombre FROM publicadoras;",
+			(n_columns, values, column_names) => {
+				var row = new ListBoxRow ();
+				row.set_activatable (true);
+				var label = new Label (values[0]);
+				row.add (label);
+				listbox.add (row);
+				return 0;
+			}
+		);
+		interfaz.viewport.show_all ();
+		interfaz.button_clean.set_sensitive (true);
+	}
+
+	[CCode (instance_pos = -1)]
+	public void show_consoles (Button source)
+	{
+		var listbox = new ListBox ();
+		listbox.selection_mode = SelectionMode.SINGLE;
+		interfaz.viewport.add (listbox);
+		modelo.base_datos.realiza_consulta_select (
+			"SELECT nombre FROM consolas;",
+			(n_columns, values, column_names) => {
+				var row = new ListBoxRow ();
+				row.set_activatable (true);
+				var label = new Label (values[0]);
+				row.add (label);
+				listbox.add (row);
+				return 0;
+			}
+		);
+		interfaz.viewport.show_all ();
+		interfaz.button_clean.set_sensitive (true);
 	}
 
 	[CCode (instance_pos = -1)]
@@ -276,6 +386,15 @@ public class C.Controlador : GLib.Object {
 		source.set_active_id ("add");
 	}
 
+	//Info dialog---------------------------------------------------------------
+
+	[CCode (instance_pos = -1)]
+	public void on_info_delete_clicked (Button source, Label label)
+	{
+		interfaz.label_del_elemento.set_label (label.get_label ());
+		interfaz.dialog_delete.run ();
+	}
+	
 	//Update dialog-------------------------------------------------------------
 	
 	[CCode (instance_pos = -1)]
