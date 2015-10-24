@@ -1,6 +1,13 @@
 using Gtk;
 using C;
 
+/**
+ * Clase Interfaz correspondiente a la vista del programa.
+ *
+ * Esta clase contiene los elementos usados por la interfaz gráfica para
+ * desplegar la información al usuario obtenida de las consultas a la base de
+ * datos.
+ */
 public class V.Interfaz {
 
 	//dialog_delete
@@ -15,6 +22,7 @@ public class V.Interfaz {
 	public Label label_info_dev;
 	public Label label_info_pub;
 	public Label label_info_engine;
+	public Viewport viewport_consoles;
 	//dialog_vg_add
 	public Dialog dialog_vg_add;
 	public Entry text_vg_nombre;
@@ -49,6 +57,18 @@ public class V.Interfaz {
 	public Button button_clean;
 	public Viewport viewport;
 
+	/**
+	 * Método para inicializar los componentes de la vista, los cuales están
+	 * descritos en un archivo XML.
+	 *
+	 * @param archvio El archvio XML que contiene la descripción de la vista.
+	 *
+	 * @param controlador Un objeto Controlador cuyos métodos funcionan como
+	 *        handlers para los eventos de la vista.
+	 *
+	 * @return 0 si todo sale bien, un entero distinto de 0 si hubo algún
+	 *         problema leyendo el archivo XML.
+	 */
 	public int inicia (string archivo, Controlador controlador)
 	{
 		Builder builder = new Builder ();
@@ -81,6 +101,7 @@ public class V.Interfaz {
 		label_info_dev = builder.get_object ("label_info_dev") as Label;
 		label_info_pub = builder.get_object ("label_info_pub") as Label;
 		label_info_engine = builder.get_object ("label_info_engine") as Label;
+		viewport_consoles = builder.get_object ("viewport_consoles") as Viewport;
 
 		//Add vg dialog
 		dialog_vg_add = builder.get_object ("dialog_vg_add") as Dialog;

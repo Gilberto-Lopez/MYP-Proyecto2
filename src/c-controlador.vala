@@ -2,38 +2,37 @@ using Gtk;
 using M;
 using V;
 
+/**
+ * Clase Controlador representando el Controlador del programa.
+ *
+ * Los objectos de esta clase sirven para proporcionar sus métodos
+ * como handlers a eventos de la interfaz gráfica.
+ */
 public class C.Controlador : GLib.Object {
 
 	private const string consolas_default = "consola1, consola2, ...";
 	private const string fecha_default = "YYYY-MM-DD";
 	private Interfaz interfaz;
 	private Modelo modelo;
-	
+
+	/**
+	 * Constructor
+	 *
+	 * Los objetos están asociados a la interfaz gráfica y
+	 * al modelo de la base de datos.
+	 *
+	 * @param interfaz El objeto que representa la interfaz gráfica.
+	 *
+	 * @param modelo El objeto que representa el modelo de la base
+	 *        de datos.
+	 */
 	public Controlador (Interfaz interfaz, Modelo modelo)
 	{
 		this.interfaz = interfaz;
 		this.modelo = modelo;
 	}
 	
-	//Callbacks
-
-	//Delete dialog-------------------------------------------------------------
-
-	[CCode (instance_pos = -1)]
-	public void on_delete_cancel_clicked (Button source)
-	{
-		interfaz.dialog_delete.hide ();
-		interfaz.label_del_elemento.set_label ("");
-	}
-
-	[CCode (instance_pos = -1)]
-	public void on_delete_accept_clicked (Button source)
-	{
-		string vg = interfaz.label_del_elemento.get_label ();
-		string? eliminar = modelo.consultas_no_select.eliminar_vj (vg);
-		modelo.base_datos.realiza_consulta (eliminar);
-		on_delete_cancel_clicked (source);
-	}
+	//Handlers
 
 	//Add game dialog-----------------------------------------------------------
 
@@ -239,24 +238,55 @@ public class C.Controlador : GLib.Object {
 		on_add_con_cancel_clicked (source);
 	}
 
-	//Main window---------------------------------------------------------------
+	//Info dialog---------------------------------------------------------------
 
+	[CCode (instance_pos = -1)]
+	public void on_info_close (Button source)
+	{
+		interfaz.label_info_vg.set_label ("");
+		interfaz.label_info_dev.set_label ("");
+		interfaz.label_info_pub.set_label ("");
+		interfaz.label_info_engine.set_label ("");
+		var child = interfaz.viewport_consoles.get_child ();
+		if (child != null) {
+			interfaz.viewport_consoles.remove (child);
+		}
+		interfaz.dialog_info.hide ();
+	}
+
+	//Update dialog-------------------------------------------------------------
+	
+	[CCode (instance_pos = -1)]
+	public void on_update_cancel_clicked (Button source)
+	{
+		interfaz.dialog_update.response (0);
+		interfaz.dialog_update.hide ();
+		interfaz.label_update_elemento.set_text ("");
+	}
+
+	[CCode (instance_pos = -1)]
+	public void on_update_accept_clicked (Button source)
+	{
+		interfaz.dialog_update.response (1);
+		interfaz.dialog_update.hide ();
+		interfaz.label_update_elemento.set_text ("");
+	}
+
+	//Main window---------------------------------------------------------------
+	
 	[CCode (instance_pos = -1)]
 	public void on_clean_clicked (Button source)
 	{
 		interfaz.viewport.remove (interfaz.viewport.get_child ());
-		interfaz.button_clean.set_sensitive (false);
+		source.set_sensitive (false);
 	}
 	
 	[CCode (instance_pos = -1)]
-	public void on_search_clicked (Button source)
-	{
-		return;
-	}
-
-	[CCode (instance_pos = -1)]
 	public void show_all (Button source)
 	{
+		if (interfaz.viewport.get_child () != null) {
+			interfaz.viewport.remove (interfaz.viewport.get_child ());
+		}
 		var listbox = new ListBox ();
 		listbox.selection_mode = SelectionMode.SINGLE;
 		interfaz.viewport.add (listbox);
@@ -272,15 +302,16 @@ public class C.Controlador : GLib.Object {
 			}
 		);
 		interfaz.viewport.show_all ();
-		/*
 		listbox.row_activated.connect (
 			(row) => {
+				var listbox_con = new ListBox ();
 				string vj = (row.get_child () as Label).get_label ();
-				modelo.base_datos.realiza_consulta_select ("SELECT * FROM videojuegos inner join dis_to on dis_to.vj_n = videojuegos.nombre  WHERE videojuegos.nombre = \"$vj\"", (n_columns, values, column_names) => {
+				modelo.base_datos.realiza_consulta_select (@"SELECT * FROM videojuegos INNER JOIN dis_to ON dis_to.vj_n = videojuegos.nombre WHERE videojuegos.nombre = '$vj'", (n_columns, values, column_names) => {
 						interfaz.label_info_vg.set_label (vj);
 						int dev = 0;
 						int pub = 0;
 						int engine = 0;
+						int con = 0;
 						for (int i = 0; i < n_columns; i++) {
 							if (column_names[i] == "dev"){
 								dev = i;
@@ -288,24 +319,37 @@ public class C.Controlador : GLib.Object {
 								pub = i;
 							} else if (column_names[i] == "motor") {
 								engine = i;
+							} else if (column_names[i] == "con_n") {
+								con = i;
 							}
 						}
 						interfaz.label_info_dev.set_label (values[dev]);
 						interfaz.label_info_pub.set_label (values[pub]);
 						interfaz.label_info_engine.set_label (values[engine]);
-						interfaz.dialog_info.run ();
+						var label = new Label(values[con]);
+						var vrow = new ListBoxRow ();
+						vrow.add (label);
+						listbox_con.add (vrow);
 						return 0;
 					}
 				);
+				if (interfaz.viewport_consoles.get_child () != null) {
+					interfaz.viewport_consoles.remove(interfaz.viewport_consoles.get_child ());
+				}
+				interfaz.viewport_consoles.add (listbox_con);
+				interfaz.viewport_consoles.show_all ();
+				interfaz.dialog_info.show_all ();
 			}
 		);
-		*/
 		interfaz.button_clean.set_sensitive (true);
 	}
 	
 	[CCode (instance_pos = -1)]
 	public void show_developers (Button source)
 	{
+		if (interfaz.viewport.get_child () != null) {
+			interfaz.viewport.remove (interfaz.viewport.get_child ());
+		}
 		var listbox = new ListBox ();
 		listbox.selection_mode = SelectionMode.SINGLE;
 		interfaz.viewport.add (listbox);
@@ -321,12 +365,36 @@ public class C.Controlador : GLib.Object {
 			}
 		);
 		interfaz.viewport.show_all ();
+		listbox.row_activated.connect (
+			(row) => {
+				var label = row.get_child () as Label;
+				var dev = label.get_label ();
+				interfaz.viewport.remove (interfaz.viewport.get_child ());
+				listbox = new ListBox ();
+				listbox.selection_mode = SelectionMode.SINGLE;
+				interfaz.viewport.add (listbox);
+				modelo.base_datos.realiza_consulta_select (
+					@"SELECT nombre FROM videojuegos WHERE dev = '$dev';",
+					(n_columns, values, column_names) => {
+						var vrow = new ListBoxRow ();
+						vrow.set_activatable (true);
+						var vlabel = new Label (values[0]);
+						vrow.add (vlabel);
+						listbox.add (vrow);
+						return 0;
+					});
+				interfaz.viewport.show_all ();
+			}
+		);
 		interfaz.button_clean.set_sensitive (true);
 	}
 	
 	[CCode (instance_pos = -1)]
 	public void show_publishers (Button source)
 	{
+		if (interfaz.viewport.get_child () != null) {
+			interfaz.viewport.remove (interfaz.viewport.get_child ());
+		}
 		var listbox = new ListBox ();
 		listbox.selection_mode = SelectionMode.SINGLE;
 		interfaz.viewport.add (listbox);
@@ -342,12 +410,36 @@ public class C.Controlador : GLib.Object {
 			}
 		);
 		interfaz.viewport.show_all ();
+		listbox.row_activated.connect (
+			(row) => {
+				var label = row.get_child () as Label;
+				var pub = label.get_label ();
+				interfaz.viewport.remove (interfaz.viewport.get_child ());
+				listbox = new ListBox ();
+				listbox.selection_mode = SelectionMode.SINGLE;
+				interfaz.viewport.add (listbox);
+				modelo.base_datos.realiza_consulta_select (
+					@"SELECT nombre FROM videojuegos WHERE pub = '$pub';",
+					(n_columns, values, column_names) => {
+						var vrow = new ListBoxRow ();
+						vrow.set_activatable (true);
+						var vlabel = new Label (values[0]);
+						vrow.add (vlabel);
+						listbox.add (vrow);
+						return 0;
+					});
+				interfaz.viewport.show_all ();
+			}
+		);
 		interfaz.button_clean.set_sensitive (true);
 	}
 
 	[CCode (instance_pos = -1)]
 	public void show_consoles (Button source)
 	{
+		if (interfaz.viewport.get_child () != null) {
+			interfaz.viewport.remove (interfaz.viewport.get_child ());
+		}
 		var listbox = new ListBox ();
 		listbox.selection_mode = SelectionMode.SINGLE;
 		interfaz.viewport.add (listbox);
@@ -363,6 +455,27 @@ public class C.Controlador : GLib.Object {
 			}
 		);
 		interfaz.viewport.show_all ();
+				listbox.row_activated.connect (
+			(row) => {
+				var label = row.get_child () as Label;
+				var con = label.get_label ();
+				interfaz.viewport.remove (interfaz.viewport.get_child ());
+				listbox = new ListBox ();
+				listbox.selection_mode = SelectionMode.SINGLE;
+				interfaz.viewport.add (listbox);
+				modelo.base_datos.realiza_consulta_select (
+					@"SELECT vj_n FROM dis_to WHERE con_n = '$con';",
+					(n_columns, values, column_names) => {
+						var vrow = new ListBoxRow ();
+						vrow.set_activatable (true);
+						var vlabel = new Label (values[0]);
+						vrow.add (vlabel);
+						listbox.add (vrow);
+						return 0;
+					});
+				interfaz.viewport.show_all ();
+			}
+		);
 		interfaz.button_clean.set_sensitive (true);
 	}
 
@@ -386,35 +499,9 @@ public class C.Controlador : GLib.Object {
 		source.set_active_id ("add");
 	}
 
-	//Info dialog---------------------------------------------------------------
-
-	[CCode (instance_pos = -1)]
-	public void on_info_delete_clicked (Button source, Label label)
-	{
-		interfaz.label_del_elemento.set_label (label.get_label ());
-		interfaz.dialog_delete.run ();
-	}
-	
-	//Update dialog-------------------------------------------------------------
-	
-	[CCode (instance_pos = -1)]
-	public void on_update_cancel_clicked (Button source)
-	{
-		interfaz.dialog_update.response (0);
-		interfaz.dialog_update.hide ();
-		interfaz.label_update_elemento.set_text ("");
-	}
-
-	[CCode (instance_pos = -1)]
-	public void on_update_accept_clicked (Button source)
-	{
-		interfaz.dialog_update.response (1);
-		interfaz.dialog_update.hide ();
-		interfaz.label_update_elemento.set_text ("");
-	}
-
 	//--------------------------------------------------------------------------
-	
+
+	/* Crea la desarrolladora, publicadora y consolas si no existen. */
 	private int existen_en_base (string dev, string pub, string[] con)
 	{
 		int r;
@@ -441,4 +528,5 @@ public class C.Controlador : GLib.Object {
 		}
 		return r;
 	}
+	
 }
