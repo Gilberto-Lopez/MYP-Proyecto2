@@ -1,5 +1,8 @@
 # MYP-Proyecto2
 
+Para ejecutar el proyecto ejecute dentro del directorio del proyecto
+<code>$make run</code>
+
 Modelado y Programación, Proyecto 2
 
 <strong>Descripción del proyecto:</strong>
